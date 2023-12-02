@@ -119,13 +119,23 @@ cor_Oceania = cor(Oceania)
 cor_South_America = cor(South_America)
 # -----------------------------------------------------------------------------
 # Simple Linear Regression
-reg_LGDP = lm(Ladder_score ~ LGDP, data = Happy_general)
-summary(reg_LGDP)
-# Confidence and prediction intervals
-# Regression Diagnostics
-par(mfrow = c(2, 2))
-plot(reg_LGDP, pch = 16, col = "cornflowerblue")
-par(mfrow = c(1, 1))
+regAnalytics = function(Dataset, argument) {
+  reg = lm(paste("Ladder_score", "~", argument), data = Dataset)
+  print(summary(reg))
+  # Confidence and prediction intervals
+  # Regression Diagnostics
+  par(mfrow = c(2, 2))
+  plot(reg,
+       pch = 16,
+       col = "cornflowerblue",
+       main = argument)
+  par(mfrow = c(1, 1))
+}
+regAnalytics(Happy_general, 'LGDP')
+regAnalytics(Happy_general, 'Support')
+regAnalytics(Happy_general, 'HLE')
+regAnalytics(Happy_general, 'Freedom')
+regAnalytics(Happy_general, 'Corruption')
 # -----------------------------------------------------------------------------
 #
 #
@@ -280,3 +290,60 @@ perform_regression_and_selection(Europe, "Europe")
 perform_regression_and_selection(North_America, "North America")
 # perform_regression_and_selection(Oceania, "Oceania")
 perform_regression_and_selection(South_America, "South America")
+# -----------------------------------------------------------------------------
+# ## Create matrix to store the fold assignments:
+# k = 10
+# n = nrow(Happy_general)
+# p = ncol(Happy_general) - 1
+# fold_indices = matrix(NA, 8, n)
+# ## Sample the fold assignments:
+# for (i in 1:8)
+#   fold_indices[i,] = sample(k, n, replace = TRUE)
+# ## Create a matrix to store the test errors:
+# bss_mses = matrix(NA, 8, p)
+# ## Calculate the test errors for the p models for each fold assignment:
+# for (i in 1:8)
+#   bss_mses[i,] = reg_bss_cv(Happy_general[, 1:p], Happy_general[, p + 1], fold_indices[i,])
+# ## Identify the best model in each case:
+# best_cvs = apply(bss_mses, 1, which.min)
+# plot(1:p,
+#      bss_mses[1,],
+#      xlab = "Number of predictors",
+#      ylab = "10-fold CV Error",
+#      type = "l")
+# points(best_cvs[1], bss_mses[1, best_cvs[1]], pch = 16)
+# for (i in 2:8) {
+#   lines(1:p, bss_mses[i,], col = i)
+#   points(best_cvs[i], bss_mses[i, best_cvs[i]], pch = 16, col = i)
+# }
+# -----------------------------------------------------------------------------
+fold_cv_error = function(Dataset) {
+  ## Create matrix to store the fold assignments:
+  k = 10
+  n = nrow(Dataset)
+  p = ncol(Dataset) - 1
+  fold_indices = matrix(NA, 8, n)
+  ## Sample the fold assignments:
+  for (i in 1:8)
+    fold_indices[i,] = sample(k, n, replace = TRUE)
+  ## Create a matrix to store the test errors:
+  bss_mses = matrix(NA, 8, p)
+  ## Calculate the test errors for the p models for each fold assignment:
+  for (i in 1:8)
+    bss_mses[i,] = reg_bss_cv(Dataset[, 1:p], Dataset[, p + 1], fold_indices[i,])
+  ## Identify the best model in each case:
+  best_cvs = apply(bss_mses, 1, which.min)
+  plot(1:p,
+       bss_mses[1,],
+       xlab = "Number of predictors",
+       ylab = "10-fold CV Error",
+       type = "l")
+  points(best_cvs[1], bss_mses[1, best_cvs[1]], pch = 16)
+  for (i in 2:8) {
+    lines(1:p, bss_mses[i,], col = i)
+    points(best_cvs[i], bss_mses[i, best_cvs[i]], pch = 16, col = i)
+  }
+}
+# -----------------------------------------------------------------------------
+fold_cv_error(Happy_general)
+fold_cv_error(Happy_general_continent)
