@@ -16,6 +16,7 @@
 # install.packages('leaps')
 # install.packages("plyr")
 # install.packages("bestglm")
+# install.packages("mice")
 # -----------------------------------------------------------------------------
 # clear the environment var area
 rm(list = ls())
@@ -126,36 +127,35 @@ par(mfrow = c(2, 2))
 plot(reg_LGDP, pch = 16, col = "cornflowerblue")
 par(mfrow = c(1, 1))
 # -----------------------------------------------------------------------------
-# Multiple Linear Regression
-lsq_fit = lm(Ladder_score ~ ., data = Happy_general)
-lsq_summary = summary(lsq_fit)
-fitted_values = predict(lsq_fit, Happy_general)
-# -----------------------------------------------------------------------------
-# Best Subset Selection
-library(leaps)
-p =  5
-bss_fit = regsubsets(Ladder_score ~ .,
-                     data = Happy_general,
-                     method = "exhaustive",
-                     nvmax = p)
-(bss_summary = summary(bss_fit))
-# -----------------------------------------------------------------------------
 #
 #
+#   __  __       _ _   _       _
+#  |  \/  |_   _| | |_(_)_ __ | | ___
+#  | |\/| | | | | | __| | '_ \| |/ _ \
+#  | |  | | |_| | | |_| | |_) | |  __/
+#  |_|  |_|\__,_|_|\__|_| .__/|_|\___|
+#                       |_|
+#   _     _
+#  | |   (_)_ __   ___  __ _ _ __
+#  | |   | | '_ \ / _ \/ _` | '__|
+#  | |___| | | | |  __/ (_| | |
+#  |_____|_|_| |_|\___|\__,_|_|
 #
 #
 #
 # -----------------------------------------------------------------------------
 reg_fold_error = function(X, y, test_data) {
-  Xy = data.frame(X, y=y)
+  Xy = data.frame(X, y = y)
   ## Fit the model to the training data
-  if(ncol(Xy)>1) tmp_fit = lm(y ~ ., data=Xy[!test_data,])
-  else tmp_fit = lm(y ~ 1, data=Xy[!test_data,,drop=FALSE])
+  if (ncol(Xy) > 1)
+    tmp_fit = lm(y ~ ., data = Xy[!test_data,])
+  else
+    tmp_fit = lm(y ~ 1, data = Xy[!test_data, , drop = FALSE])
   ## Generate predictions over the test data
-  yhat = predict(tmp_fit, Xy[test_data,,drop=FALSE])
+  yhat = predict(tmp_fit, Xy[test_data, , drop = FALSE])
   yobs = y[test_data]
   ## Compute the test MSE
-  test_error = mean((yobs - yhat)^2)
+  test_error = mean((yobs - yhat) ^ 2)
   return(test_error)
 }
 # -----------------------------------------------------------------------------
@@ -192,68 +192,91 @@ reg_bss_cv = function(X, y, fold_ind) {
   # Return the test error for models M_1, ..., M_p
   return(test_errors)
 }
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# Load the bestglm package
-library(bestglm)
-# Create multi-panel plotting device
-par(mfrow = c(2, 2))
-# Produce plots, highlighting optimal value of k
-(best_adjr2 = which.max(bss_summary$adjr2))
-(best_cp = which.min(bss_summary$cp))
-(best_bic = which.min(bss_summary$bic))
-k = 5
-n = nrow(Happy_general)
-fold_index = sample(k,n,replace=TRUE)
-## Apply the function to the Happy data
-bss_mse = reg_bss_cv(Happy_general[, 1:5], Happy_general[, 6], fold_index)
-## Identify model with the lowest error
-(best_cv = which.min(bss_mse))
-
-plot(
-  1:p,
-  bss_summary$adjr2,
-  xlab = "Number of predictors",
-  ylab = "Adjusted Rsq",
-  type = "b"
-)
-points(best_adjr2,
-       bss_summary$adjr2[best_adjr2],
-       col = "red",
-       pch = 16)
-plot(1:p,
-     bss_summary$cp,
-     xlab = "Number of predictors",
-     ylab = "Cp",
-     type = "b")
-points(best_cp, bss_summary$cp[best_cp], col = "red", pch = 16)
-plot(1:p,
-     bss_summary$bic,
-     xlab = "Number of predictors",
-     ylab = "BIC",
-     type = "b")
-points(best_bic,
-       bss_summary$bic[best_bic],
-       col = "red",
-       pch = 16)
-plot(1:p,
-     bss_mse,
-     xlab = "Number of predictors",
-     ylab = "10-fold CV Error",
-     type = "b")
-points(best_cv, bss_mse[best_cv], col = "red", pch = 16)
+# -----------------------------------------------------------------------------
+# Multiple Linear Regression
+library(leaps)
+perform_regression_and_selection = function(Dataset, name) {
+  lsq_fit = lm(Ladder_score ~ ., data = Dataset)
+  lsq_summary = summary(lsq_fit)
+  fitted_values = predict(lsq_fit, Dataset)
+  # ---------------------------------------------------------------------------
+  # Best Subset Selection
+  p = ncol(Dataset) - 1
+  bss_fit = regsubsets(Ladder_score ~ .,
+                       data = Dataset,
+                       method = "exhaustive",
+                       nvmax = p)
+  bss_summary = summary(bss_fit)
+  print(bss_summary)
+  # ---------------------------------------------------------------------------
+  # Create multi-panel plotting device
+  par(mfrow = c(2, 2))
+  # Produce plots, highlighting optimal value of k
+  best_adjr2 = which.max(bss_summary$adjr2)
+  best_cp = which.min(bss_summary$cp)
+  best_bic = which.min(bss_summary$bic)
+  k = 5
+  n = nrow(Dataset)
+  set.seed(123)
+  fold_index = sample(k, n, replace = TRUE)
+  # Apply the function to the Happy data
+  bss_mse = reg_bss_cv(Dataset[, 1:p], Dataset[, p + 1], fold_index)
+  # Identify model with the lowest error
+  best_cv = which.min(bss_mse)
+  
+  plot(
+    1:p,
+    bss_summary$adjr2,
+    xlab = "Number of predictors",
+    ylab = "Adjusted Rsq",
+    type = "b"
+  )
+  points(best_adjr2,
+         bss_summary$adjr2[best_adjr2],
+         col = "red",
+         pch = 16)
+  plot(1:p,
+       bss_summary$cp,
+       xlab = "Number of predictors",
+       ylab = "Cp",
+       type = "b")
+  points(best_cp,
+         bss_summary$cp[best_cp],
+         col = "red",
+         pch = 16)
+  plot(
+    1:p,
+    bss_summary$bic,
+    xlab = "Number of predictors",
+    ylab = "BIC",
+    type = "b"
+  )
+  points(best_bic,
+         bss_summary$bic[best_bic],
+         col = "red",
+         pch = 16)
+  plot(1:p,
+       bss_mse,
+       xlab = "Number of predictors",
+       ylab = "K-fold CV Error",
+       type = "b")
+  points(best_cv, bss_mse[best_cv], col = "red", pch = 16)
+  title = paste("Variable selection for", name)
+  mtext(
+    title,
+    side = 3,
+    outer = TRUE,
+    line = -3,
+    cex = 1.5
+  )
+  par(mfrow = c(1, 1))
+}
+# -----------------------------------------------------------------------------
+perform_regression_and_selection(Happy_general, "General")
+perform_regression_and_selection(Happy_general_continent, "General with Continent")
+perform_regression_and_selection(Africa, "Africa")
+perform_regression_and_selection(Asia, "Asia")
+perform_regression_and_selection(Europe, "Europe")
+perform_regression_and_selection(North_America, "North America")
+# perform_regression_and_selection(Oceania, "Oceania")
+perform_regression_and_selection(South_America, "South America")
