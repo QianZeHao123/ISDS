@@ -291,32 +291,6 @@ perform_regression_and_selection(North_America, "North America")
 # perform_regression_and_selection(Oceania, "Oceania")
 perform_regression_and_selection(South_America, "South America")
 # -----------------------------------------------------------------------------
-# ## Create matrix to store the fold assignments:
-# k = 10
-# n = nrow(Happy_general)
-# p = ncol(Happy_general) - 1
-# fold_indices = matrix(NA, 8, n)
-# ## Sample the fold assignments:
-# for (i in 1:8)
-#   fold_indices[i,] = sample(k, n, replace = TRUE)
-# ## Create a matrix to store the test errors:
-# bss_mses = matrix(NA, 8, p)
-# ## Calculate the test errors for the p models for each fold assignment:
-# for (i in 1:8)
-#   bss_mses[i,] = reg_bss_cv(Happy_general[, 1:p], Happy_general[, p + 1], fold_indices[i,])
-# ## Identify the best model in each case:
-# best_cvs = apply(bss_mses, 1, which.min)
-# plot(1:p,
-#      bss_mses[1,],
-#      xlab = "Number of predictors",
-#      ylab = "10-fold CV Error",
-#      type = "l")
-# points(best_cvs[1], bss_mses[1, best_cvs[1]], pch = 16)
-# for (i in 2:8) {
-#   lines(1:p, bss_mses[i,], col = i)
-#   points(best_cvs[i], bss_mses[i, best_cvs[i]], pch = 16, col = i)
-# }
-# -----------------------------------------------------------------------------
 fold_cv_error = function(Dataset) {
   ## Create matrix to store the fold assignments:
   k = 10
