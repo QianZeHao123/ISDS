@@ -48,201 +48,146 @@
 % 
 % 
 \section{Introduction}
-\subsection{Background}
+\subsection{Intro to Data Set and its Context}
+% 
+% 
+% 
+% 
 \begin{frame}
-  \frametitle{The Premier League}
+  \frametitle{Data Set and its Context}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Intro to Dataset.png}
+  \end{figure}
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\section{Statistical Modeling}
+% 
+% 
+% 
+% 
+\subsection{Model Explanation}
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Multiple Linear Regression Model}
   \begin{itemize}
-    \item Premier League: Top tier of English Football League System.
-    \item 20 teams play 38 home and away matches.
-    \item Globally renowned and challenging to predict outcomes.
+    \item \textbf{Model Target:} Some socio-economic indexes are used to predict Ladder Score to assist government decision-making.
+    \item \textbf{Independent Variables:} LGDP, Support, HLE, Freedom, Corruption, Continent
+    \item \textbf{Dependent Variables:} Ladder Score
+    \item \textbf{Model Function:} $input(LGDP, Support,...) \Rightarrow output(Ladder\ Score)$
+          $ Ladder Score = \beta_0 + \beta_1 * LGDP + \beta_2 * Support + ... + \epsilon $
+    \item \textbf{Optimization Target:} Making the model with the \textcolor{red}{best subset} and \textcolor{red}{higher Adjusted R-squared}. $
+            \left\{
+            \begin{matrix}
+              Select\ the\ independent\ variables \\
+              Update\ \beta\ and\ \epsilon\ to\ minimize\ the\ residual\ sum\ of\ squared
+            \end{matrix}
+            \right.
+          $
   \end{itemize}
-
-  \textbf{Background}
-
-  \begin{enumerate}
-    \item Outcome predictions involve expert analysis.
-    \item Factors include team performance, player form, and tactics.
-    \item Growing data, e.g., player touches, team running stats, manager experience.
-  \end{enumerate}
-\end{frame}
-
-% All of the following is optional and typically not needed. 
-% 
-% 
-% 
-% 
-% ----------------------------------------------------------------------
-\section{Mathematical Modeling}
-% 
-% 
-% 
-% 
-\subsection{Method 1: Entropy Weight Method in Football Team Evaluation}
-\begin{frame}
-  \frametitle{Overview of Entropy Weight Method in Football}
   % 
   % 
   % 
   % 
-  % 
-  % 
-  \begin{enumerate}
-    \item Introduction
-          \begin{itemize}
-            \item The Entropy Weight Method is a powerful analytical technique used in football team evaluation. It goes beyond traditional methods by considering the inherent information entropy within various performance attributes.
-          \end{itemize}
-    \item Key Characteristics
-          \begin{itemize}
-            \item Entropy: Reflects the degree of uncertainty or randomness within a dataset.
-            \item Weight Assignment: Assigns weights to attributes based on their information entropy.
-
-          \end{itemize}
-    \item Objective
-          \begin{itemize}
-            \item The method aims to provide a nuanced evaluation, giving higher importance to attributes that contribute more to understanding a team's performance.
-          \end{itemize}
-  \end{enumerate}
-
-
 \end{frame}
 % 
 % 
 % 
 % 
-\begin{frame}
-  \frametitle{Key Steps in Entropy Method}
-  \begin{enumerate}
-    \item \textbf{Data Collection and Attribute Selection}
-    \item \textbf{Entropy Calculation:}
-          \begin{itemize}
-            \item Utilize mathematical formulas to calculate the entropy of each selected attribute.
-            \item Entropy = $- \sum (p_i \cdot \log_2(p_i))$, where $p_i$ is the probability of each attribute value.
-          \end{itemize}
-
-    \item \textbf{Weight Assignment:}
-          \begin{itemize}
-            \item Assign weights to attributes based on their calculated entropy.
-            \item Attributes with higher entropy receive lower weights, and vice versa.
-            \item The sum of weights equals 1 for normalization.
-          \end{itemize}
-
-    \item \textbf{Outcome:}
-          \begin{itemize}
-            \item The result is a set of weights that reflect the relative importance of each attribute in evaluating a football team's performance.
-          \end{itemize}
-  \end{enumerate}
-\end{frame}
-% 
-% 
-\begin{frame}
-  \frametitle{Entropy Method in Our Model}
+% \begin{frame}{Comparison of Linear Regression Models}
+\begin{frame}{Why we choose Multiple Linear Regression Model}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/entropy_method_flowchart.png}
-  \end{figure}
-  % 
-  % 
-\end{frame}
-% 
-% 
-% 
-% 
-% 
-%  
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-\subsection{Method 2: Linear Transformation and Gradient Ascend}
-\begin{frame}
-  \frametitle{Linear Transformation and Gradient Ascend}
-  \begin{enumerate}
-    \item Linear transformation involves transforming input variables into a new space where they are more linear and easier to model
-    \item Our model will be taking in 5-dimension vector and transforming it to a 1-dimension vector $$ F_v: \mathbb{R}^{5} \Rightarrow \mathbb{R} $$
-    \item The vector v basically consists of the following variables:
-          \begin{itemize}
-            \item The number of games won by a team in $n^{th}$ week, $v_1$
-            \item The number of games lost by a team in $n^{th}$ week, $v_2$
-            \item The number of games drawn by a team in $n^{th}$ week, $v_3$
-            \item The goal difference (goals scored - goals conceded) of a team in $n^{th}$ week, $v_4$
-            \item The number of points scored by a team in $n^{th}$ week, $v_5$
-          \end{itemize}
-  \end{enumerate}
-\end{frame}
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-\begin{frame}
-  \frametitle{Linear Transformation and Gradient Ascend}
-  \begin{itemize}
-    \item The linear transformation will transform the 5-dimensional vector into a one-dimensional vector which is the total number of points in the final week $F(v)$
-    \item To calculate we will use the following formula: $$ F(v)=wv+b $$
-    \item $w$ is a 5-dimensional vector, weights of each variable in vector v
-    \item $b$ is the scalar bias - systematic error
-
-  \end{itemize}
-\end{frame}
-% 
-% 
-% 
-% 
-% 
-\begin{frame}
-  \frametitle{Using Gradient Ascend}
-  \begin{itemize}
-    \item To calculate w and b, we will use gradient ascend on historical data.
-    \item Normalize $v$ and $F(v)$ by centering and standardizing it.
-    \item Use normalized data and take out predicted points using any initial value of weight.
-    \item See the error by finding the difference between normalized $F(v)$ and predicted $F(v)$
-    \item Find the gradient of the weight using the formula - transposed-v.error
-    \item Find the gradient of scalar bias using the formula - sum of all elements in error vector
-    \item Then to find the updated gradient the following formula is:
-    $$ w = w + a*w_{gradient}, \ b = b + a*b_{gradient} $$
-    \item Then denormalize w and b to find the actual values
-    
-  \end{itemize}
-\end{frame}
-% 
-% 
-% 
-% 
-\section{Result Analysis}
-\subsection{Grabbing Data from Web}
-\begin{frame}
-  \frametitle{Grabbing Data from Web}
-  \begin{figure}
-    \includegraphics[width=\textwidth]{img/DataGrab.png}
-  \end{figure}
-\end{frame}
-\subsection{Evaluating the Teams's Tier}
-\begin{frame}
-  \frametitle{Evaluating the Teams's Tier with Entropy Method}
-  \begin{figure}
-    \includegraphics[width=\textwidth]{img/Entropy_output.png}
+    \includegraphics[width=\textwidth]{img/Why choose this model.png}
   \end{figure}
 \end{frame}
 % 
 % 
 % 
-% Prediction of 2023/24's final point
+% 
+\subsection{Model Construction}
 % 
 % 
 % 
-\subsection{Prediction of 2023/24's winner point}
+% 
 \begin{frame}
-  \frametitle{Prediction of 2023/24's winner point}
+  \frametitle{Constructing the Model -- Data Processing}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/prediction_current_year.png}
+    \includegraphics[width=\textwidth]{img/Data Process.png}
   \end{figure}
 \end{frame}
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Constructing the Model -- Dataset Inspectation}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Dataset We have.png}
+  \end{figure}
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Constructing the Model -- Bring dataset to MLR model}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/UsingMLR.png}
+  \end{figure}
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\section{Conclusions and Analysis}
+% 
+% 
+% 
+% 
+\subsection{Results and Analysis}
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Model Results and Analysis}
+\end{frame}
+% 
+% 
+% 
+% 
+\subsection{Conclusions}
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Conclusions and Insights}
+\end{frame}
+% 
+% 
+% 
+% 
 % 
 % 
 % 
@@ -252,31 +197,243 @@
 % 
 % 
 \section{Future Work}
-\subsection{Our plans, our limitations and how these models could improve}
-\begin{frame}
-  \frametitle{Future plans}
-  \begin{itemize}
-    \item Once our models are all complete, we will compare them with respect to efficiency and accuracy in predicting the winning team with this year's data as input. We could make use of Mallows' Cp and BIC statistic to establish which model has the best predictive performance.
-    \item We will then critically analyse the most successful model and input a test dataset from earlier years to ensure we have not overfitted to our training dataset.
-    \item To improve this model, it would be wise to consider variables other than the teams' performance and establish whether they are confounding and extraneous; for example, the about of money invested in each team.
-  \end{itemize}
-\end{frame}
-% 
-% 
-% 
-% 
 % 
 % 
 % 
 % 
 \begin{frame}
-  \frametitle{What is this model useful for}
-  \begin{enumerate}
-    \item Once the most significant variables have been established, a researcher could potentially use the model to advise  a team's manager of where best to focus their efforts, or indeed they could consult with a bookie to help them predict the odds of the game.
-    \item Of course, this model overlooks the human element of the game. Factors that a manager might be aware of such as player motivation, injuries, and team dynamics can have a significant impact on the outcome of a game, but they are challenging to factor into our model.
-    \item Ultimately though, it is impossible to control for every variable and, even if we did the result could surprise us. But this model is beneficial in finding which variables give the teams the best chance of success.
-  \end{enumerate}
+  \frametitle{Next Steps}
 \end{frame}
+% \section{Introduction}
+% \subsection{Background}
+% \begin{frame}
+%   \frametitle{The Premier League}
+%   \begin{itemize}
+%     \item Premier League: Top tier of English Football League System.
+%     \item 20 teams play 38 home and away matches.
+%     \item Globally renowned and challenging to predict outcomes.
+%   \end{itemize}
+
+%   \textbf{Background}
+
+%   \begin{enumerate}
+%     \item Outcome predictions involve expert analysis.
+%     \item Factors include team performance, player form, and tactics.
+%     \item Growing data, e.g., player touches, team running stats, manager experience.
+%   \end{enumerate}
+% \end{frame}
+
+% % All of the following is optional and typically not needed. 
+% % 
+% % 
+% % 
+% % 
+% % ----------------------------------------------------------------------
+% \section{Mathematical Modeling}
+% % 
+% % 
+% % 
+% % 
+% \subsection{Method 1: Entropy Weight Method in Football Team Evaluation}
+% \begin{frame}
+%   \frametitle{Overview of Entropy Weight Method in Football}
+%   % 
+%   % 
+%   % 
+%   % 
+%   % 
+%   % 
+%   \begin{enumerate}
+%     \item Introduction
+%           \begin{itemize}
+%             \item The Entropy Weight Method is a powerful analytical technique used in football team evaluation. It goes beyond traditional methods by considering the inherent information entropy within various performance attributes.
+%           \end{itemize}
+%     \item Key Characteristics
+%           \begin{itemize}
+%             \item Entropy: Reflects the degree of uncertainty or randomness within a dataset.
+%             \item Weight Assignment: Assigns weights to attributes based on their information entropy.
+
+%           \end{itemize}
+%     \item Objective
+%           \begin{itemize}
+%             \item The method aims to provide a nuanced evaluation, giving higher importance to attributes that contribute more to understanding a team's performance.
+%           \end{itemize}
+%   \end{enumerate}
+
+
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% \begin{frame}
+%   \frametitle{Key Steps in Entropy Method}
+%   \begin{enumerate}
+%     \item \textbf{Data Collection and Attribute Selection}
+%     \item \textbf{Entropy Calculation:}
+%           \begin{itemize}
+%             \item Utilize mathematical formulas to calculate the entropy of each selected attribute.
+%             \item Entropy = $- \sum (p_i \cdot \log_2(p_i))$, where $p_i$ is the probability of each attribute value.
+%           \end{itemize}
+
+%     \item \textbf{Weight Assignment:}
+%           \begin{itemize}
+%             \item Assign weights to attributes based on their calculated entropy.
+%             \item Attributes with higher entropy receive lower weights, and vice versa.
+%             \item The sum of weights equals 1 for normalization.
+%           \end{itemize}
+
+%     \item \textbf{Outcome:}
+%           \begin{itemize}
+%             \item The result is a set of weights that reflect the relative importance of each attribute in evaluating a football team's performance.
+%           \end{itemize}
+%   \end{enumerate}
+% \end{frame}
+% % 
+% % 
+% \begin{frame}
+%   \frametitle{Entropy Method in Our Model}
+%   \begin{figure}
+%     \includegraphics[width=\textwidth]{img/entropy_method_flowchart.png}
+%   \end{figure}
+%   % 
+%   % 
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% % 
+% %  
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% \subsection{Method 2: Linear Transformation and Gradient Ascend}
+% \begin{frame}
+%   \frametitle{Linear Transformation and Gradient Ascend}
+%   \begin{enumerate}
+%     \item Linear transformation involves transforming input variables into a new space where they are more linear and easier to model
+%     \item Our model will be taking in 5-dimension vector and transforming it to a 1-dimension vector $$ F_v: \mathbb{R}^{5} \Rightarrow \mathbb{R} $$
+%     \item The vector v basically consists of the following variables:
+%           \begin{itemize}
+%             \item The number of games won by a team in $n^{th}$ week, $v_1$
+%             \item The number of games lost by a team in $n^{th}$ week, $v_2$
+%             \item The number of games drawn by a team in $n^{th}$ week, $v_3$
+%             \item The goal difference (goals scored - goals conceded) of a team in $n^{th}$ week, $v_4$
+%             \item The number of points scored by a team in $n^{th}$ week, $v_5$
+%           \end{itemize}
+%   \end{enumerate}
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% \begin{frame}
+%   \frametitle{Linear Transformation and Gradient Ascend}
+%   \begin{itemize}
+%     \item The linear transformation will transform the 5-dimensional vector into a one-dimensional vector which is the total number of points in the final week $F(v)$
+%     \item To calculate we will use the following formula: $$ F(v)=wv+b $$
+%     \item $w$ is a 5-dimensional vector, weights of each variable in vector v
+%     \item $b$ is the scalar bias - systematic error
+
+%   \end{itemize}
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% % 
+% \begin{frame}
+%   \frametitle{Using Gradient Ascend}
+%   \begin{itemize}
+%     \item To calculate w and b, we will use gradient ascend on historical data.
+%     \item Normalize $v$ and $F(v)$ by centering and standardizing it.
+%     \item Use normalized data and take out predicted points using any initial value of weight.
+%     \item See the error by finding the difference between normalized $F(v)$ and predicted $F(v)$
+%     \item Find the gradient of the weight using the formula - transposed-v.error
+%     \item Find the gradient of scalar bias using the formula - sum of all elements in error vector
+%     \item Then to find the updated gradient the following formula is:
+%     $$ w = w + a*w_{gradient}, \ b = b + a*b_{gradient} $$
+%     \item Then denormalize w and b to find the actual values
+
+%   \end{itemize}
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% \section{Result Analysis}
+% \subsection{Grabbing Data from Web}
+% \begin{frame}
+%   \frametitle{Grabbing Data from Web}
+%   \begin{figure}
+%     \includegraphics[width=\textwidth]{img/DataGrab.png}
+%   \end{figure}
+% \end{frame}
+% \subsection{Evaluating the Teams's Tier}
+% \begin{frame}
+%   \frametitle{Evaluating the Teams's Tier with Entropy Method}
+%   \begin{figure}
+%     \includegraphics[width=\textwidth]{img/Entropy_output.png}
+%   \end{figure}
+% \end{frame}
+% % 
+% % 
+% % 
+% % Prediction of 2023/24's final point
+% % 
+% % 
+% % 
+% \subsection{Prediction of 2023/24's winner point}
+% \begin{frame}
+%   \frametitle{Prediction of 2023/24's winner point}
+%   \begin{figure}
+%     \includegraphics[width=\textwidth]{img/prediction_current_year.png}
+%   \end{figure}
+% \end{frame}
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% % 
+% \section{Future Work}
+% \subsection{Our plans, our limitations and how these models could improve}
+% \begin{frame}
+%   \frametitle{Future plans}
+%   \begin{itemize}
+%     \item Once our models are all complete, we will compare them with respect to efficiency and accuracy in predicting the winning team with this year's data as input. We could make use of Mallows' Cp and BIC statistic to establish which model has the best predictive performance.
+%     \item We will then critically analyse the most successful model and input a test dataset from earlier years to ensure we have not overfitted to our training dataset.
+%     \item To improve this model, it would be wise to consider variables other than the teams' performance and establish whether they are confounding and extraneous; for example, the about of money invested in each team.
+%   \end{itemize}
+% \end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+
+% \begin{frame}
+%   \frametitle{What is this model useful for}
+%   \begin{enumerate}
+%     \item Once the most significant variables have been established, a researcher could potentially use the model to advise  a team's manager of where best to focus their efforts, or indeed they could consult with a bookie to help them predict the odds of the game.
+%     \item Of course, this model overlooks the human element of the game. Factors that a manager might be aware of such as player motivation, injuries, and team dynamics can have a significant impact on the outcome of a game, but they are challenging to factor into our model.
+%     \item Ultimately though, it is impossible to control for every variable and, even if we did the result could surprise us. But this model is beneficial in finding which variables give the teams the best chance of success.
+%   \end{enumerate}
+% \end{frame}
 % 
 % 
 % 
