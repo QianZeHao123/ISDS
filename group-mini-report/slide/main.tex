@@ -182,7 +182,81 @@
 % 
 % 
 \begin{frame}
-  \frametitle{Model Results and Analysis}
+  \frametitle{Analysing the model: Simple Linear Regression}
+  \framesubtitle{Check Assumptions:}
+  \begin{columns}[onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \begin{enumerate}
+        \item Mean = 0
+        \item Homoskedasticity
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{enumerate}
+        \setcounter{enumi}{2}
+        \item Independence
+        \item Normally Distributed
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+  % 
+  % 
+  % 
+  % 
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Assumption Check.png}
+  \end{figure}
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Analysing the model: Multiple Linear Regression}
+  \begin{itemize}
+    \item VIF to check if there is a correlation between predictor variables;
+    \item Example: \begin{itemize}
+            \item Africa shows low values
+            \item Europe shows more of a spread
+          \end{itemize}
+  \end{itemize}
+  % 
+  % 
+  % 
+  % 
+  \begin{figure}
+    \includegraphics[width=0.8\textwidth]{img/Vif Check.png}
+  \end{figure}
+  % 
+  % 
+  % 
+  % 
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Best Subset Selection}
+  \begin{itemize}
+    \item Europe shows agreement between the range of models.
+    \item Africa shows a larger range of possible values with far more variable graphical shapes.
+  \end{itemize}
+  % 
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Best Subset Selection.png}
+  \end{figure}
+  % 
+  % 
 \end{frame}
 % 
 % 
@@ -194,7 +268,14 @@
 % 
 % 
 \begin{frame}
-  \frametitle{Conclusions and Insights}
+  \frametitle{Correlation}
+  % 
+  % 
+  % 
+  %
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Scatter plot.png}
+  \end{figure}
 \end{frame}
 % 
 % 
@@ -202,6 +283,51 @@
 % 
 % 
 % 
+\begin{frame}
+  \frametitle{Equations}
+  % 
+  % 
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/Equations.png}
+  \end{figure}
+  % 
+  % 
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Government Advice}
+  % 
+  \begin{itemize}
+    \item By looking at the general, overall dataset clear support is the most important metric and so the variable to focus on improving first. \\ \ \\ \ \\
+    \item However, through best subset selection it is clear that a range of variables all come into this, and so focus on purely support will no yield the best results, although it should be prioritised.
+  \end{itemize}
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{Advice per Continent}
+  % 
+  For each continent, there are certain differences that stood out and should be highlighted for governments within them: \\ \
+  \begin{enumerate}
+    \item Africa: LGDP is the most important metric and to such an extent that ladder score can almost be modelled directly off it. Thus to improve happiness, LGDP is key to focus on;
+    \item Europe: Similar to the general dataset and shows a range of factors will need to be focused on, starting with LGDP;
+    \item Asia: Focus on all factors, however with a prioritisation of  LGDP, Support and Freedom;
+    \item North America: A focus on LGDP and Freedom is crucial to improving the Happiness extent;
+    \item Data for South America and Oceania is not sufficient to currently draw conclusions from.
+  \end{enumerate}
+\end{frame}
 % 
 % 
 % 
@@ -215,7 +341,60 @@
 % 
 \begin{frame}
   \frametitle{Next Steps}
+  \begin{enumerate}
+    \item \textbf{Improve the accuracy of the model}
+          \begin{itemize}
+            \item Interaction between variables (e.g. $\textit{HLE} \times \textit{Support}$).
+            \item Try non-linear transformation of the predictors (e.g. $log(HLE)$, $HLE^2$, $HLE^3$).
+          \end{itemize}
+    \item \textbf{Bug fixing}
+          \begin{itemize}
+            \item The data for North America was anomalous and independent variables could not be selected by linear regression analysis. Our team will next process anomalous data from the North American dataset.
+            \item There are only two countries in Oceania, and when they are brought into the analytical model, they report an error and cannot perform linear regression. We will try to combine the Oceania data into other similar continents for analysis.
+          \end{itemize}
+  \end{enumerate}
 \end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+\begin{frame}
+  \frametitle{}
+  \centering
+  \vfill
+  \Huge Thanks for watching! \\
+  \vfill
+  \begin{figure}
+    \includegraphics[width=0.4\textwidth]{img/qrcode_github.com.png}
+  \end{figure}
+  \vfill
+  \small ISDS Group 10 \\
+  \today
+\end{frame}
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
 % \section{Introduction}
 % \subsection{Background}
 % \begin{frame}
