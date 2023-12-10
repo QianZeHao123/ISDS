@@ -68,27 +68,27 @@ Continent_mapping
 # Oceania: Area data
 # South_America: Area data
 # -----------------------------------------------------------------------------
-Africa = Happy_general_continent[Happy_general_continent$Continent == "Africa",]
+Africa = Happy_general_continent[Happy_general_continent$Continent == "Africa", ]
 Africa$Country_name = NULL
 Africa$Continent = NULL
 # -----------------------------------------------------------------------------
-Asia = Happy_general_continent[Happy_general_continent$Continent == "Asia",]
+Asia = Happy_general_continent[Happy_general_continent$Continent == "Asia", ]
 Asia$Country_name = NULL
 Asia$Continent = NULL
 # -----------------------------------------------------------------------------
-Europe = Happy_general_continent[Happy_general_continent$Continent == "Europe",]
+Europe = Happy_general_continent[Happy_general_continent$Continent == "Europe", ]
 Europe$Country_name = NULL
 Europe$Continent = NULL
 # -----------------------------------------------------------------------------
-North_America = Happy_general_continent[Happy_general_continent$Continent == "North America",]
+North_America = Happy_general_continent[Happy_general_continent$Continent == "North America", ]
 North_America$Country_name = NULL
 North_America$Continent = NULL
 # -----------------------------------------------------------------------------
-Oceania = Happy_general_continent[Happy_general_continent$Continent == "Oceania",]
+Oceania = Happy_general_continent[Happy_general_continent$Continent == "Oceania", ]
 Oceania$Country_name = NULL
 Oceania$Continent = NULL
 # -----------------------------------------------------------------------------
-South_America = Happy_general_continent[Happy_general_continent$Continent == "South America",]
+South_America = Happy_general_continent[Happy_general_continent$Continent == "South America", ]
 South_America$Country_name = NULL
 South_America$Continent = NULL
 # -----------------------------------------------------------------------------
@@ -114,14 +114,14 @@ Happy_general$Numeric_continent = NULL
 # install and load the GGally library
 library(GGally)
 # generate the pairs plot
-ggpairs(Happy_general_continent, main = "General Data with Numeric Continent")
-ggpairs(Happy_general, main = "General Data Scatterplot")
-ggpairs(Africa, main = "Africa Data Scatterplot")
-ggpairs(Asia, main = "Asia Data Scatterplot")
-ggpairs(Europe, main = "Europe Data Scatterplot")
-ggpairs(North_America, main = "North America Data Scatterplot")
+# ggpairs(Happy_general_continent, main = "General Data with Numeric Continent")
+# ggpairs(Happy_general, main = "General Data Scatterplot")
+# ggpairs(Africa, main = "Africa Data Scatterplot")
+# ggpairs(Asia, main = "Asia Data Scatterplot")
+# ggpairs(Europe, main = "Europe Data Scatterplot")
+# ggpairs(North_America, main = "North America Data Scatterplot")
 # ggpairs(Oceania, main = "Oceania Data Scatterplot")
-ggpairs(South_America, main = "South America Data Scatterplot")
+# ggpairs(South_America, main = "South America Data Scatterplot")
 # -----------------------------------------------------------------------------
 # calculate the correlation coefficient with pearson method
 cor_Happy_general = cor(Happy_general)
@@ -136,6 +136,20 @@ cor_South_America = cor(South_America)
 # A new dataset: Europe_Oceania
 Europe_Oceania = rbind(Europe, Oceania)
 
+# -----------------------------------------------------------------------------
+#
+#   ____  _             _
+#  / ___|(_)_ __   __ _| | ___
+#  \___ \| | '_ \ / _` | |/ _ \
+#   ___) | | | | | (_| | |  __/
+#  |____/|_|_| |_|\__, |_|\___|
+#                 |___/
+#   _     _
+#  | |   (_)_ __   ___  __ _ _ __
+#  | |   | | '_ \ / _ \/ _` | '__|
+#  | |___| | | | |  __/ (_| | |
+#  |_____|_|_| |_|\___|\__,_|_|
+#
 # -----------------------------------------------------------------------------
 # Simple Linear Regression
 regAnalytics = function(Dataset, argument) {
@@ -187,7 +201,7 @@ RemoveOutliers <- function(Dataset) {
   boxplots_name <- boxplot.stats(Dataset$Ladder_score)
   outliers <- boxplots_name$out
   outliers_row <- Dataset$Ladder_score %in% outliers
-  clean_name <- Dataset[!outliers_row, ]
+  clean_name <- Dataset[!outliers_row,]
   return(clean_name)
 }
 
@@ -202,13 +216,13 @@ regAnalytics(clean_Happy_general, 'Corruption')
 # -----------------------------------------------------------------------------
 # This code lacks organization ???
 # interaction between variables
-mean(Oceania$LGDP)
-Europe
-int1 <-
-  lm(log(Ladder_score) ~ LGDP + Corruption + Support * Freedom, data = South_America)
-summary(int1)$adj.r.sq
-int2 <- lm(Ladder_score ~ LGDP * Corruption, data = Happy_general)
-summary(int2)$r.sq
+# mean(Oceania$LGDP)
+# Europe
+# int1 <-
+#   lm(log(Ladder_score) ~ LGDP + Corruption + Support * Freedom, data = South_America)
+# summary(int1)$adj.r.sq
+# int2 <- lm(Ladder_score ~ LGDP * Corruption, data = Happy_general)
+# summary(int2)$r.sq
 # -----------------------------------------------------------------------------
 #
 #
@@ -233,7 +247,7 @@ reg_fold_error = function(X, y, test_data) {
   Xy = data.frame(X, y = y)
   ## Fit the model to the training data
   if (ncol(Xy) > 1)
-    tmp_fit = lm(y ~ ., data = Xy[!test_data,])
+    tmp_fit = lm(y ~ ., data = Xy[!test_data, ])
   else
     tmp_fit = lm(y ~ 1, data = Xy[!test_data, , drop = FALSE])
   ## Generate predictions over the test data
@@ -255,13 +269,13 @@ reg_bss_cv = function(X, y, fold_ind) {
     # Using all *but* the fold as training data, find the best-fitting models with 1, ..., p
     # predictors, i.e. M_1, ..., M_p
     tmp_fit = regsubsets(y ~ .,
-                         data = Xy[fold_ind != fold,],
+                         data = Xy[fold_ind != fold, ],
                          method = "exhaustive",
                          nvmax = p)
     best_models = summary(tmp_fit)$which[, 2:(1 + p)]
     # Using the fold as test data, find the test error associated with each of M_1,..., M_p
     for (k in 1:p) {
-      fold_errors[fold, k] = reg_fold_error(X[, best_models[k,]], y, fold_ind ==
+      fold_errors[fold, k] = reg_fold_error(X[, best_models[k, ]], y, fold_ind ==
                                               fold)
     }
   }
@@ -282,9 +296,13 @@ reg_bss_cv = function(X, y, fold_ind) {
 library(car)
 library(leaps)
 perform_regression_and_selection = function(Dataset, name) {
+  print('--------------------------------------------------------------------')
   lsq_fit = lm(Ladder_score ~ ., data = Dataset)
+  # print(lsq_fit)
   # Check Multi-collinearity of variables with VIF:
+  print('Multi-collinearity Check:')
   print(vif(lsq_fit))
+  print('--------------------------------------------------------------------')
   lsq_summary = summary(lsq_fit)
   fitted_values = predict(lsq_fit, Dataset)
   # ---------------------------------------------------------------------------
@@ -295,12 +313,16 @@ perform_regression_and_selection = function(Dataset, name) {
                        method = "exhaustive",
                        nvmax = p)
   bss_summary = summary(bss_fit)
+  print('Best Subset selection:')
   print(bss_summary)
+  print('--------------------------------------------------------------------')
   # ---------------------------------------------------------------------------
   # Create multi-panel plotting device
   par(mfrow = c(2, 2))
   # Produce plots, highlighting optimal value of k
   best_adjr2 = which.max(bss_summary$adjr2)
+  print("Adjust R square is:")
+  print(bss_summary$adjr2)
   best_cp = which.min(bss_summary$cp)
   best_bic = which.min(bss_summary$bic)
   k = 5
@@ -366,7 +388,7 @@ perform_regression_and_selection(Africa, "Africa")
 perform_regression_and_selection(Asia, "Asia")
 perform_regression_and_selection(Europe, "Europe")
 perform_regression_and_selection(North_America, "North America")
-# perform_regression_and_selection(Oceania, "Oceania")
+perform_regression_and_selection(Europe_Oceania, "Oceania")
 perform_regression_and_selection(South_America, "South America")
 # -----------------------------------------------------------------------------
 # Does this change with outlier removal
@@ -375,6 +397,7 @@ clean_Europe <- RemoveOutliers(Europe)
 clean_North_America <- RemoveOutliers(North_America)
 clean_Africa <- RemoveOutliers(Africa)
 clean_Asia <- RemoveOutliers(Asia)
+clean_Oceania = RemoveOutliers(Europe_Oceania)
 
 perform_regression_and_selection(clean_Happy_general, "clean General")
 # perform_regression_and_selection(Happy_general_continent, "General with Continent")
@@ -384,6 +407,7 @@ perform_regression_and_selection(clean_Europe, "clean Europe")
 perform_regression_and_selection(clean_North_America, "clean North America")
 # perform_regression_and_selection(Oceania, "Oceania")
 perform_regression_and_selection(clean_South_America, "clean South America")
+perform_regression_and_selection(clean_Oceania, "clean Oceania")
 # -----------------------------------------------------------------------------
 fold_cv_error = function(Dataset) {
   ## Create matrix to store the fold assignments:
@@ -393,25 +417,31 @@ fold_cv_error = function(Dataset) {
   fold_indices = matrix(NA, 8, n)
   ## Sample the fold assignments:
   for (i in 1:8)
-    fold_indices[i,] = sample(k, n, replace = TRUE)
+    fold_indices[i, ] = sample(k, n, replace = TRUE)
   ## Create a matrix to store the test errors:
   bss_mses = matrix(NA, 8, p)
   ## Calculate the test errors for the p models for each fold assignment:
   for (i in 1:8)
-    bss_mses[i,] = reg_bss_cv(Dataset[, 1:p], Dataset[, p + 1], fold_indices[i,])
+    bss_mses[i, ] = reg_bss_cv(Dataset[, 1:p], Dataset[, p + 1], fold_indices[i, ])
   ## Identify the best model in each case:
   best_cvs = apply(bss_mses, 1, which.min)
   plot(1:p,
-       bss_mses[1,],
+       bss_mses[1, ],
        xlab = "Number of predictors",
        ylab = "10-fold CV Error",
        type = "l")
   points(best_cvs[1], bss_mses[1, best_cvs[1]], pch = 16)
   for (i in 2:8) {
-    lines(1:p, bss_mses[i,], col = i)
+    lines(1:p, bss_mses[i, ], col = i)
     points(best_cvs[i], bss_mses[i, best_cvs[i]], pch = 16, col = i)
   }
 }
 # -----------------------------------------------------------------------------
 fold_cv_error(Happy_general)
 fold_cv_error(Happy_general_continent)
+fold_cv_error(Africa)
+fold_cv_error(Asia)
+fold_cv_error(Europe)
+fold_cv_error(Europe_Oceania)
+fold_cv_error(South_America)
+
