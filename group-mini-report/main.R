@@ -17,6 +17,8 @@
 # install.packages("plyr")
 # install.packages("bestglm")
 # install.packages("mice")
+# install.packages("GGally")
+# install.package("car")
 # -----------------------------------------------------------------------------
 # clear the environment var area
 rm(list = ls())
@@ -99,14 +101,27 @@ Happy_general = Happy_general_continent
 Happy_general$Numeric_continent = NULL
 # -----------------------------------------------------------------------------
 # create scatter plot matrix with pairs()
-pairs(Happy_general_continent, main = "General Data with Numeric Continent")
-pairs(Happy_general, main = "General Data Scatterplot")
-pairs(Africa, main = "Africa Data Scatterplot")
-pairs(Asia, main = "Asia Data Scatterplot")
-pairs(Europe, main = "Europe Data Scatterplot")
-pairs(North_America, main = "North America Data Scatterplot")
-pairs(Oceania, main = "Oceania Data Scatterplot")
-pairs(South_America, main = "South America Data Scatterplot")
+# pairs(Happy_general_continent, main = "General Data with Numeric Continent")
+# pairs(Happy_general, main = "General Data Scatterplot")
+# pairs(Africa, main = "Africa Data Scatterplot")
+# pairs(Asia, main = "Asia Data Scatterplot")
+# pairs(Europe, main = "Europe Data Scatterplot")
+# pairs(North_America, main = "North America Data Scatterplot")
+# pairs(Oceania, main = "Oceania Data Scatterplot")
+# pairs(South_America, main = "South America Data Scatterplot")
+# -----------------------------------------------------------------------------
+# create scatter plot matrix with pairs()
+# install and load the GGally library
+library(GGally)
+# generate the pairs plot
+ggpairs(Happy_general_continent, main = "General Data with Numeric Continent")
+ggpairs(Happy_general, main = "General Data Scatterplot")
+ggpairs(Africa, main = "Africa Data Scatterplot")
+ggpairs(Asia, main = "Asia Data Scatterplot")
+ggpairs(Europe, main = "Europe Data Scatterplot")
+ggpairs(North_America, main = "North America Data Scatterplot")
+# ggpairs(Oceania, main = "Oceania Data Scatterplot")
+ggpairs(South_America, main = "South America Data Scatterplot")
 # -----------------------------------------------------------------------------
 # calculate the correlation coefficient with pearson method
 cor_Happy_general = cor(Happy_general)
@@ -136,6 +151,60 @@ regAnalytics(Happy_general, 'Support')
 regAnalytics(Happy_general, 'HLE')
 regAnalytics(Happy_general, 'Freedom')
 regAnalytics(Happy_general, 'Corruption')
+# -----------------------------------------------------------------------------
+#
+# Residual diagnostics
+# Autocorrelation
+autocor <- function(x) {
+  xreg <- lm(Ladder_score ~ x, data = Happy_general)
+  X <- xreg$residuals
+  plot(X[1:136], X[2:137])
+  cor(X[1:136], X[2:137])
+  a <- sample(seq(1, 137, by = 1),
+              replace = FALSE,
+              prob = rep(1 / 137, 137))
+  modrandom <- lm(Ladder_score[a] ~ x[a], data = Happy_general)
+  P <- modrandom$residuals
+  plot(P[1:136], P[2:137])
+  cor(P[1:136], P[2:137])
+  print(cor(X[1:136], X[2:137]))
+  print(cor(P[1:136], P[2:137]))
+  print(summary(xreg)$adj.r.sq)
+  print(summary(modrandom)$adj.r.sq)
+}
+autocor(Happy_general$LGDP)
+autocor(Happy_general$Support)
+autocor(Happy_general$HLE)
+autocor(Happy_general$Freedom)
+autocor(Happy_general$Corruption)
+# -----------------------------------------------------------------------------
+# Remove  Outliers
+RemoveOutliers <- function(Dataset) {
+  boxplots_name <- boxplot.stats(Dataset$Ladder_score)
+  outliers <- boxplots_name$out
+  outliers_row <- Dataset$Ladder_score %in% outliers
+  clean_name <- Dataset[!outliers_row, ]
+  return(clean_name)
+}
+
+clean_Happy_general <- RemoveOutliers(Happy_general)
+
+# Perform linear regression
+regAnalytics(clean_Happy_general, 'LGDP')
+regAnalytics(clean_Happy_general, 'Support')
+regAnalytics(clean_Happy_general, 'HLE')
+regAnalytics(clean_Happy_general, 'Freedom')
+regAnalytics(clean_Happy_general, 'Corruption')
+# -----------------------------------------------------------------------------
+# This code lacks organization ???
+# interaction between variables
+mean(Oceania$LGDP)
+Europe
+int1 <-
+  lm(log(Ladder_score) ~ LGDP + Corruption + Support * Freedom, data = South_America)
+summary(int1)$adj.r.sq
+int2 <- lm(Ladder_score ~ LGDP * Corruption, data = Happy_general)
+summary(int2)$r.sq
 # -----------------------------------------------------------------------------
 #
 #
