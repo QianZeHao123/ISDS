@@ -133,6 +133,10 @@ cor_North_America = cor(North_America)
 cor_Oceania = cor(Oceania)
 cor_South_America = cor(South_America)
 # -----------------------------------------------------------------------------
+# A new dataset: Europe_Oceania
+Europe_Oceania = rbind(Europe, Oceania)
+
+# -----------------------------------------------------------------------------
 # Simple Linear Regression
 regAnalytics = function(Dataset, argument) {
   reg = lm(paste("Ladder_score", "~", argument), data = Dataset)
@@ -223,6 +227,8 @@ summary(int2)$r.sq
 #
 #
 # -----------------------------------------------------------------------------
+# Check Multi-collinearity of variables with VIF:
+# -----------------------------------------------------------------------------
 reg_fold_error = function(X, y, test_data) {
   Xy = data.frame(X, y = y)
   ## Fit the model to the training data
@@ -273,9 +279,12 @@ reg_bss_cv = function(X, y, fold_ind) {
 }
 # -----------------------------------------------------------------------------
 # Multiple Linear Regression
+library(car)
 library(leaps)
 perform_regression_and_selection = function(Dataset, name) {
   lsq_fit = lm(Ladder_score ~ ., data = Dataset)
+  # Check Multi-collinearity of variables with VIF:
+  print(vif(lsq_fit))
   lsq_summary = summary(lsq_fit)
   fitted_values = predict(lsq_fit, Dataset)
   # ---------------------------------------------------------------------------
@@ -359,6 +368,22 @@ perform_regression_and_selection(Europe, "Europe")
 perform_regression_and_selection(North_America, "North America")
 # perform_regression_and_selection(Oceania, "Oceania")
 perform_regression_and_selection(South_America, "South America")
+# -----------------------------------------------------------------------------
+# Does this change with outlier removal
+clean_South_America <- RemoveOutliers(South_America)
+clean_Europe <- RemoveOutliers(Europe)
+clean_North_America <- RemoveOutliers(North_America)
+clean_Africa <- RemoveOutliers(Africa)
+clean_Asia <- RemoveOutliers(Asia)
+
+perform_regression_and_selection(clean_Happy_general, "clean General")
+# perform_regression_and_selection(Happy_general_continent, "General with Continent")
+perform_regression_and_selection(clean_Africa, "clean Africa")
+perform_regression_and_selection(clean_Asia, "clean Asia")
+perform_regression_and_selection(clean_Europe, "clean Europe")
+perform_regression_and_selection(clean_North_America, "clean North America")
+# perform_regression_and_selection(Oceania, "Oceania")
+perform_regression_and_selection(clean_South_America, "clean South America")
 # -----------------------------------------------------------------------------
 fold_cv_error = function(Dataset) {
   ## Create matrix to store the fold assignments:
