@@ -437,6 +437,7 @@ fold_cv_error = function(Dataset) {
   }
 }
 # -----------------------------------------------------------------------------
+# With bugs
 fold_cv_error(Happy_general)
 fold_cv_error(Happy_general_continent)
 fold_cv_error(Africa)
