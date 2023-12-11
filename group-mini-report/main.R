@@ -438,11 +438,55 @@ fold_cv_error = function(Dataset) {
 }
 # -----------------------------------------------------------------------------
 # With bugs
-fold_cv_error(Happy_general)
-fold_cv_error(Happy_general_continent)
-fold_cv_error(Africa)
-fold_cv_error(Asia)
-fold_cv_error(Europe)
-fold_cv_error(Europe_Oceania)
-fold_cv_error(South_America)
+# fold_cv_error(Happy_general)
+# fold_cv_error(Happy_general_continent)
+# fold_cv_error(Africa)
+# fold_cv_error(Asia)
+# fold_cv_error(Europe)
+# fold_cv_error(Europe_Oceania)
+# fold_cv_error(South_America)
+# -----------------------------------------------------------------------------
+mean_Oceania <- colMeans(Oceania)
+mean_Asia <- colMeans(Asia)
+mean_Africa <- colMeans(Africa)
+mean_Europe <- colMeans(Europe)
+mean_South_America <- colMeans(South_America)
+mean_North_America <- colMeans(North_America)
+
+comparison_result <- data.frame(
+  # Continent = c("Asia", "Europe", "North America", "South America", "Africa"),
+  Continent = rep(
+    c("Asia", "Europe", "North America", "South America", "Africa"),
+    each = length(mean_Oceania)
+  ),
+  Mean_Oceania = rep(mean_Oceania, times = 5),
+  Mean_Continent = c(
+    mean_Asia,
+    mean_Europe,
+    mean_North_America,
+    mean_South_America,
+    mean_Africa
+  ),
+  Comparison = ifelse(
+    mean_Oceania > c(
+      mean_Asia,
+      mean_Europe,
+      mean_North_America,
+      mean_South_America,
+      mean_Africa
+    ),
+    "Greater",
+    ifelse(
+      mean_Oceania < c(
+        mean_Asia,
+        mean_Europe,
+        mean_North_America,
+        mean_South_America,
+        mean_Africa
+      ),
+      "Less",
+      "Equal"
+    )
+  )
+)
 
